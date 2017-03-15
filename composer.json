@@ -1,0 +1,24 @@
+{
+  "name": "csizmarik/behattest",
+  "description": "This is a test project for behat",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Csizmarik Norbert",
+      "email": "csizmarik.norbert@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "behat/behat": "^3.2@dev",
+    "phpunit/phpunit": "6.0.8"
+  },
+  "require": {
+    "symfony/dependency-injection": "^3.3@dev"
+  },
+  "autoload": {
+    "psr-0": {
+      "": "./src/"
+    }
+  }
+}

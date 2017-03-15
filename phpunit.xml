@@ -1,0 +1,10 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="all">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="dayperiod">
+            <directory>tests/services/internal/day_period</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

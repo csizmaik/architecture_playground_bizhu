@@ -1,0 +1,9 @@
+parameters:
+#    parameter_name: value
+
+services:
+    day_period_service:
+        class: services\internal\day_period\DayPeriodService
+    greeting_service:
+        class: services\internal\greeting\GreetingService
+        arguments: ["@day_period_service"]
