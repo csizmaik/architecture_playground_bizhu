@@ -1,12 +1,12 @@
 Feature: Customer greeting
   In order to be interactive webpage
   As a customer
-  I want to greeted by the webpage
+  I want to be greeted by the webpage
 
   Rules:
   - Before 10 am it says: Good Morning!
   - After 10 am, but before 8 pm it says: Hello!
-  - After 8 pm it says: Good Night!
+  - After 8 pm it says: Good Evening!
 
   Scenario: Visiting the webpage in the morning
     Given the time is "07:30"

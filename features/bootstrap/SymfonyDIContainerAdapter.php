@@ -1,7 +1,7 @@
 <?php
-use Symfony\Component\Config\FileLocator;
+use dic_container\DIContainerFactory;
+use dic_container\Environment;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * Created by PhpStorm.
@@ -16,19 +16,18 @@ class SymfonyDIContainerAdapter implements DIContainerAdapter
      */
     private $DIContainer;
 
-    public function __construct($DIContainerConfigPath, $DIContainerConfigFilename)
+    public function __construct($DIContainerConfigPath)
     {
-        $this->initContainer($DIContainerConfigPath, $DIContainerConfigFilename);
+        $this->initContainer($DIContainerConfigPath);
     }
 
     public function getService($serviceName) {
         return $this->DIContainer->get($serviceName);
     }
 
-    private function initContainer($DIContainerConfigPath, $DIContainerConfigFilename) {
-        $this->DIContainer = new ContainerBuilder();
-        $loader = new YamlFileLoader($this->DIContainer,new FileLocator($DIContainerConfigPath));
-        $loader->load($DIContainerConfigFilename);
+    private function initContainer($DIContainerConfigPath) {
+        $DIContainerFactory = new DIContainerFactory($DIContainerConfigPath);
+        $this->DIContainer = $DIContainerFactory->createForEnvironment(Environment::TEST);
     }
 
 

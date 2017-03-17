@@ -22,14 +22,13 @@ abstract class SymfonyDIContainerAwareContext implements Context
         $suite = $beforeSuiteScope->getEnvironment()->getSuite();
         $DIContainerAdapterClass = $suite->getSetting('DIContainerAdapterClass');
         $DIContainerConfigPath = $suite->getSetting('DIContainerConfigPath');
-        $DIContainerConfigFilename = $suite->getSetting('DIContainerConfigFilename');
 
-        self::initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath, $DIContainerConfigFilename);
+        self::initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath);
     }
 
-    private static function initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath, $DIContainerConfigFilename) {
+    private static function initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath) {
         self::checkAdapterClass($DIContainerAdapterClass);
-        self::$DIContainerAdapter = new $DIContainerAdapterClass($DIContainerConfigPath, $DIContainerConfigFilename);
+        self::$DIContainerAdapter = new $DIContainerAdapterClass($DIContainerConfigPath);
         self::checkAdapterObject();
     }
 
