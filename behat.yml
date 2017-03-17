@@ -5,6 +5,5 @@ default:
             settings:
                 DIContainerAdapterClass: SymfonyDIContainerAdapter
                 DIContainerConfigPath: ./app/config/
-                DIContainerConfigFilename: 'dic_services.yml'
             contexts:
                 - GreetingContext
