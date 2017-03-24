@@ -8,7 +8,6 @@
 
 namespace services\internal\greeting;
 
-use services\internal\day_period\DayPeriodService;
 use services\internal\greeting\executing_task\GreetingForDayPeriod;
 
 class GreetingService
@@ -18,7 +17,7 @@ class GreetingService
      */
     private $dayPeriodService;
 
-    public function __construct(DayPeriodService $dayPeriodService)
+    public function __construct($dayPeriodService)
     {
         $this->dayPeriodService = $dayPeriodService;
     }
@@ -26,6 +25,8 @@ class GreetingService
     public function greetingAt(\DateTime $dateTime)
     {
         $dayPeriod = $this->dayPeriodService->getDayPeriodForTime($dateTime);
+        // NOT TODO - nem módosíthatok állapotot itt sem
+		//$dayPeriod->var = 10;
         $greetingForTime = new GreetingForDayPeriod();
         return $greetingForTime->greetinForDayPeriod($dayPeriod);
     }
