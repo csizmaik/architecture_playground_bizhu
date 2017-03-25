@@ -1,4 +1,6 @@
 <?php
+namespace base;
+
 use Behat\Behat\Context\Context;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 
@@ -34,13 +36,13 @@ abstract class SymfonyDIContainerAwareContext implements Context
 
     private static function checkAdapterClass($DIContainerAdapterClass) {
         if ( !class_exists($DIContainerAdapterClass) ) {
-            throw new InvalidArgumentException("Unknownk DI Container Adapter class: ".$DIContainerAdapterClass);
+            throw new \InvalidArgumentException("Unknownk DI Container Adapter class: ".$DIContainerAdapterClass);
         }
     }
 
     private static function checkAdapterObject() {
         if (!self::$DIContainerAdapter instanceof DIContainerAdapter) {
-            throw new InvalidArgumentException("Invalid DI Container Adapter class! The adapter must implement DIContainerAdapter interface!");
+            throw new \InvalidArgumentException("Invalid DI Container Adapter class! The adapter must implement DIContainerAdapter interface!");
         }
     }
 

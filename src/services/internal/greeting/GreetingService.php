@@ -25,7 +25,7 @@ class GreetingService
     public function greetingAt(\DateTime $dateTime)
     {
         $dayPeriod = $this->dayPeriodService->getDayPeriodForTime($dateTime);
-        // NOT TODO - nem módosíthatok állapotot itt sem
+        // NOT DO - nem módosíthatok állapotot itt sem
 		//$dayPeriod->var = 10;
         $greetingForTime = new GreetingForDayPeriod();
         return $greetingForTime->greetinForDayPeriod($dayPeriod);

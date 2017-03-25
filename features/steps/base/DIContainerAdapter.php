@@ -1,5 +1,7 @@
 <?php
 
+namespace base;
+
 /**
  * Created by PhpStorm.
  * User: Norbi

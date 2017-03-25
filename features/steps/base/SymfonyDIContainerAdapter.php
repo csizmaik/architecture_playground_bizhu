@@ -1,4 +1,6 @@
 <?php
+namespace base;
+
 use dic_container\DIContainerFactory;
 use dic_container\Environment;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

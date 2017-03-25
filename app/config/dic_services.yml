@@ -1,10 +1,11 @@
-parameters:
-    day_period_sercive.class: services\internal\day_period\DayPeriodService
-    greeting_service.class: services\internal\greeting\GreetingService
-
 services:
     day_period_service:
         class: %day_period_sercive.class%
     greeting_service:
         class: %greeting_service.class%
         arguments: ["@day_period_service"]
+    user_service:
+        class: %user_service.class%
+        arguments: ["@user_repository"]
+    user_repository:
+        class: %user_repository.class%

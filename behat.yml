@@ -1,9 +1,10 @@
 default:
-    autoload: %paths.base%/features/bootstrap
+    autoload: %paths.base%/features/steps
     suites:
         default:
             settings:
-                DIContainerAdapterClass: SymfonyDIContainerAdapter
+                DIContainerAdapterClass: base\SymfonyDIContainerAdapter
                 DIContainerConfigPath: ./app/config/
             contexts:
                 - GreetingContext
+                - UserContext

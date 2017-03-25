@@ -1,2 +1,0 @@
-parameters:
-    day_period_sercive.class: services\internal\day_period\DayPeriodService

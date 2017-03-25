@@ -15,13 +15,13 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class DIContainerFactory
 {
     private $DIContainerConfigPath;
-    private $configFileName;
+    private $serviceDefFileName;
     private $configFileExtension;
 
     public function __construct($DIContainerConfigPath, $configFileName = 'dic_services', $configFileExtension = 'yml')
     {
         $this->DIContainerConfigPath = $DIContainerConfigPath;
-        $this->configFileName = $configFileName;
+        $this->serviceDefFileName = $configFileName;
         $this->configFileExtension = $configFileExtension;
     }
 
@@ -39,14 +39,19 @@ class DIContainerFactory
         {
             $loader->load($envConfigFile);
         }
+		$loader->load($this->getServicesFileName());
         return $DIContainer;
     }
 
     private function getBaseConfigFileName() {
-        return $this->configFileName . "." . $this->configFileExtension;
+        return $this->serviceDefFileName . "_config." . $this->configFileExtension;
     }
 
     private function getEnvConfigFileName($environment) {
-        return $this->configFileName . "_" . $environment . "." . $this->configFileExtension;
+        return $this->serviceDefFileName . "_config_" . $environment . "." . $this->configFileExtension;
     }
+
+    private function getServicesFileName() {
+		return $this->serviceDefFileName . "." . $this->configFileExtension;
+	}
 }

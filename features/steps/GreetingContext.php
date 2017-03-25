@@ -5,6 +5,7 @@
  * Date: 2017. 03. 12.
  * Time: 8:43
  */
+use base\SymfonyDIContainerAwareContext;
 use Behat\Behat\Context\Context;
 use PHPUnit\Framework\Assert;
 use services\internal\greeting\GreetingService;
