@@ -11,4 +11,5 @@ namespace base;
 interface DIContainerAdapter
 {
     public function getService($serviceName);
+    public function resetService($serviceName);
 }

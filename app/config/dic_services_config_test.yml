@@ -1,3 +1,3 @@
 parameters:
     day_period_sercive.class: services\internal\day_period\DayPeriodService
-    user_repository.class: services\internal\user\InMemoryUserRepository
+    user_repository.class: services\external\storage\DoctrineUserRepository

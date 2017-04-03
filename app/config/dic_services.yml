@@ -4,8 +4,19 @@ services:
     greeting_service:
         class: %greeting_service.class%
         arguments: ["@day_period_service"]
-    user_service:
-        class: %user_service.class%
-        arguments: ["@user_repository"]
+    doctrine_service:
+        factory: [%doctrine_service.factory.class%, getInstance]
+    time_service:
+        class: %time_service.class%
+    auth_service:
+        class: %auth_service.class%
+        arguments: ["@user_repository","@transaction_service","@time_service"]
+    user_management_service:
+        class: %user_management_service.class%
+        arguments: ["@user_repository","@transaction_service"]
     user_repository:
-        class: %user_repository.class%
+        factory: ['@doctrine_service', getRepository]
+        arguments: ['services\internal\user\User']
+    transaction_service:
+        class: %transaction_service.class%
+        arguments: ["@doctrine_service"]

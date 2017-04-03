@@ -33,4 +33,8 @@ class SymfonyDIContainerAdapter implements DIContainerAdapter
     }
 
 
+	public function resetService($serviceName)
+	{
+		$this->DIContainer->set($serviceName, null);
+	}
 }
