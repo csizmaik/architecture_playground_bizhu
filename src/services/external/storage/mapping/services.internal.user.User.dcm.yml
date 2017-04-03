@@ -1,0 +1,22 @@
+services\internal\user\User:
+  type: entity
+  repositoryClass: services\external\storage\DoctrineUserRepository
+  table: portal_user
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    userId:
+      type: string
+    name:
+      type: string
+    login:
+      type: string
+    password:
+      type: string
+    active:
+      type: boolean
+    unsuccessLoginCount:
+      type: integer
