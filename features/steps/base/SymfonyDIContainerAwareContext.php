@@ -2,7 +2,7 @@
 namespace base;
 
 use Behat\Behat\Context\Context;
-use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 
 /**
  * Created by PhpStorm.
@@ -12,42 +12,43 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
  */
 abstract class SymfonyDIContainerAwareContext implements Context
 {
-    /**
-     * @var DIContainerAdapter
-     */
-    private static $DIContainerAdapter;
+	/**
+	 * @var DIContainerAdapter
+	 */
+	protected $DIContainerAdapter;
 
-    /**
-     * @BeforeSuite
-     */
-    public static function initDIContainer(BeforeSuiteScope $beforeSuiteScope) {
-        $suite = $beforeSuiteScope->getEnvironment()->getSuite();
-        $DIContainerAdapterClass = $suite->getSetting('DIContainerAdapterClass');
-        $DIContainerConfigPath = $suite->getSetting('DIContainerConfigPath');
+	protected function initDIContainer(BeforeScenarioScope $beforeSuiteScope)
+	{
+		$suite = $beforeSuiteScope->getEnvironment()->getSuite();
+		$DIContainerAdapterClass = $suite->getSetting('DIContainerAdapterClass');
+		$DIContainerConfigPath = $suite->getSetting('DIContainerConfigPath');
+		$this->initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath);
+	}
 
-        self::initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath);
-    }
+	private function initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath)
+	{
+		$this->checkAdapterClass($DIContainerAdapterClass);
+		$this->DIContainerAdapter = new $DIContainerAdapterClass($DIContainerConfigPath);
+		$this->checkAdapterObject();
+	}
 
-    private static function initContainerAdapter($DIContainerAdapterClass, $DIContainerConfigPath) {
-        self::checkAdapterClass($DIContainerAdapterClass);
-        self::$DIContainerAdapter = new $DIContainerAdapterClass($DIContainerConfigPath);
-        self::checkAdapterObject();
-    }
+	private function checkAdapterClass($DIContainerAdapterClass)
+	{
+		if ( !class_exists($DIContainerAdapterClass) )
+		{
+			throw new \InvalidArgumentException("Unknownk DI Container Adapter class: ".$DIContainerAdapterClass);
+		}
+	}
 
-    private static function checkAdapterClass($DIContainerAdapterClass) {
-        if ( !class_exists($DIContainerAdapterClass) ) {
-            throw new \InvalidArgumentException("Unknownk DI Container Adapter class: ".$DIContainerAdapterClass);
-        }
-    }
+	private function checkAdapterObject()
+	{
+		if (!$this->DIContainerAdapter instanceof DIContainerAdapter)
+		{
+			throw new \InvalidArgumentException("Invalid DI Container Adapter class! The adapter must implement DIContainerAdapter interface!");
+		}
+	}
 
-    private static function checkAdapterObject() {
-        if (!self::$DIContainerAdapter instanceof DIContainerAdapter) {
-            throw new \InvalidArgumentException("Invalid DI Container Adapter class! The adapter must implement DIContainerAdapter interface!");
-        }
-    }
-
-    protected static function getService($seviceName) {
-        return self::$DIContainerAdapter->getService($seviceName);
-    }
-
+	protected function getService($seviceName) {
+		return $this->DIContainerAdapter->getService($seviceName);
+	}
 }

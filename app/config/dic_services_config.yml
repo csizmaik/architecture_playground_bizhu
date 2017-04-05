@@ -1,0 +1,6 @@
+parameters:
+    day_period_sercive.class: services\internal\day_period\DayPeriodService
+    greeting_service.class: services\internal\greeting\GreetingService
+    auth_service.class: services\internal\user\AuthService
+    user_management_service.class: services\internal\user\UserManagementService
+    time_service.class: services\external\time\SystemTimeService

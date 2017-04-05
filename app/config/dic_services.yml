@@ -4,8 +4,23 @@ services:
     greeting_service:
         class: %greeting_service.class%
         arguments: ["@day_period_service"]
-    user_service:
-        class: %user_service.class%
-        arguments: ["@user_repository"]
+    time_service:
+        class: %time_service.class%
+    pdo:
+        class: \PDO
+        arguments: ["sqlite::memory:"]
+    user_query_type:
+        class: services\external\storage\graphql\pdo\UserQueryTypePDO
+        arguments: ["@pdo"]
+    user_mutation_type:
+        class: services\external\storage\graphql\pdo\UserMutationTypePDO
+        arguments: ["@pdo"]
     user_repository:
-        class: %user_repository.class%
+        class: services\external\storage\graphql\GraphQLUserRepository
+        arguments: ["@user_query_type","@user_mutation_type"]
+    auth_service:
+        class: %auth_service.class%
+        arguments: ["@user_repository","@time_service"]
+    user_management_service:
+        class: %user_management_service.class%
+        arguments: ["@user_repository"]

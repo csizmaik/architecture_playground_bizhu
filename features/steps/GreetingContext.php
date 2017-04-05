@@ -7,6 +7,7 @@
  */
 use base\SymfonyDIContainerAwareContext;
 use Behat\Behat\Context\Context;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use PHPUnit\Framework\Assert;
 use services\internal\greeting\GreetingService;
 
@@ -25,6 +26,13 @@ class GreetingContext extends SymfonyDIContainerAwareContext implements Context
     {
         $this->visitTime = new DateTime("today");
     }
+
+	/**
+	 * @BeforeScenario
+	 */
+	public function initDIContainer(BeforeScenarioScope $beforeSuiteScope) {
+		parent::initDIContainer($beforeSuiteScope);
+	}
 
     /**
      * @Given /^the time is "([^"]*)"$/
@@ -49,7 +57,7 @@ class GreetingContext extends SymfonyDIContainerAwareContext implements Context
     public function theWebpageSays($expectedGreeting)
     {
         /** @var GreetingService $greetingService */
-        $greetingService = parent::getService('greeting_service');
+        $greetingService = $this->getService('greeting_service');
         $greeting = $greetingService->greetingAt($this->visitTime);
         Assert::assertEquals(
             $greeting,
