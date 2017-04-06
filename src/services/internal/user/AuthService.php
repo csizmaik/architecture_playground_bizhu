@@ -8,9 +8,9 @@
 
 namespace services\internal\user;
 
+use services\external\storage\Transaction;
+use services\external\time\TimeService;
 
-use services\internal\time\TimeService;
-use services\internal\transaction\Transaction;
 
 class AuthService
 {

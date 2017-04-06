@@ -8,9 +8,7 @@
 
 namespace services\external\storage;
 
-
 use Doctrine\ORM\EntityManager;
-use services\internal\transaction\Transaction;
 
 class DoctrineTransaction implements Transaction
 {
@@ -18,7 +16,6 @@ class DoctrineTransaction implements Transaction
 	 * @var EntityManager
 	 */
 	private $entityManager;
-
 
 	/**
 	 * DoctrineTransaction constructor.

@@ -8,7 +8,6 @@
 
 namespace services\internal\user;
 
-
 use PHPUnit\Framework\TestCase;
 
 class PasswordValidatorTest extends TestCase

@@ -2,6 +2,7 @@
     <testsuites>
         <testsuite name="all">
             <directory>tests</directory>
+            <directory>src</directory>
         </testsuite>
         <testsuite name="dayperiod">
             <directory>tests/services/internal/day_period</directory>

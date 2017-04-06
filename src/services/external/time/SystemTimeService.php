@@ -8,9 +8,6 @@
 
 namespace services\external\time;
 
-
-use services\internal\time\TimeService;
-
 class SystemTimeService implements TimeService
 {
 

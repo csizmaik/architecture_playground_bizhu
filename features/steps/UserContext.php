@@ -55,7 +55,7 @@ class UserContext extends SymfonyDIContainerAwareContext implements Context
 		$userRepository = $this->getService('user_repository');
 		if (!$userRepository->isUserExistsWithLogin($login))
 		{
-			/** @var \services\internal\user\UserManagementService $userService */
+			/** @var \services\internal\user\UserService $userService */
 			$userService = $this->getService('user_management_service');
 			$userService->registerUser("Existing User",$login,$password);
 
@@ -67,7 +67,7 @@ class UserContext extends SymfonyDIContainerAwareContext implements Context
 	 */
 	public function userIsDeactivated($loginName)
 	{
-		/** @var \services\internal\user\UserManagementService $authService */
+		/** @var \services\internal\user\UserService $authService */
 		$authService = $this->getService('user_management_service');
 		$authService->deactivateUserByLogin($loginName);
 	}
@@ -77,7 +77,7 @@ class UserContext extends SymfonyDIContainerAwareContext implements Context
 	 */
 	public function theUserTriesToRegisterWithLoginnameAndPassword($name, $login, $password)
 	{
-		/** @var \services\internal\user\UserManagementService $userService */
+		/** @var \services\internal\user\UserService $userService */
 		$userService = $this->getService('user_management_service');
 		try {
 			$this->registrationResult = $userService->registerUser($name, $login, $password);
@@ -141,7 +141,7 @@ class UserContext extends SymfonyDIContainerAwareContext implements Context
 		$userRepository = $this->getService('user_repository');
 		/** @var \services\internal\user\User $user */
 		$user = $userRepository->getUserByLoginName($login);
-		/** @var \services\internal\user\UserManagementService $userService */
+		/** @var \services\internal\user\UserService $userService */
 		$userService = $this->getService('user_management_service');
 		$userService->resetUnsuccessLoginCounterByUserId($user->getId());
 	}

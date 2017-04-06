@@ -6,11 +6,10 @@
  * Time: 8:56 PM
  */
 
-namespace services\internal\transaction;
+namespace services\external\storage;
 
 
 interface Transaction
 {
 	public function transactional(callable $transactionalFunction);
-	public function flush();
 }

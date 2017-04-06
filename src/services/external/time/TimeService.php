@@ -6,7 +6,7 @@
  * Time: 6:31 PM
  */
 
-namespace services\internal\time;
+namespace services\external\time;
 
 
 interface TimeService

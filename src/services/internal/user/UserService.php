@@ -8,10 +8,9 @@
 
 namespace services\internal\user;
 
+use services\external\storage\Transaction;
 
-use services\internal\transaction\Transaction;
-
-class UserManagementService
+class UserService
 {
 	private $userRepository;
 	/**
