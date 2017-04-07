@@ -8,7 +8,7 @@
 
 namespace services\internal\user;
 
-use DateTime;
+use lib\validation\ValidationResult;
 
 class User
 {
@@ -29,6 +29,7 @@ class User
 
 	/**
 	 * User constructor.
+	 * @param $userId
 	 * @param $name
 	 * @param $login
 	 * @param $password
@@ -41,21 +42,34 @@ class User
 		$this->setPassword($password);
 	}
 
-	public function loginWithPasswordAt($password, DateTime $loginTime)
+	public function validateCredential($password)
 	{
+		$validationResult = new ValidationResult();
 		if ($this->isMaxUnsuccessLoginReached())
 		{
-			$this->denyLogin("Maximum unsuccess login reached!");
+			$validationResult->addFailure("Maximum unsuccess login reached!");
 		}
 		if ($password != $this->password)
 		{
-			$this->denyLogin("Wrong password");
+			$validationResult->addFailure("Wrong password");
 		}
 		if (!$this->isActive())
 		{
-			$this->denyLogin("Inactive user can't login!");
+			$validationResult->addFailure("Inactive user can't login!");
 		}
-		$this->registerSuccessLoginAt($loginTime);
+		return $validationResult;
+	}
+
+	public function registerCredentialValidationResult($successValidation, \DateTime $validationDate)
+	{
+		if ($successValidation)
+		{
+			$this->registerSuccessLoginAt($validationDate);
+		}
+		else
+		{
+			$this->registerFailedLogin();
+		}
 	}
 
 	public function deactivate()
@@ -124,12 +138,6 @@ class User
 	{
 		PasswordValidator::validate($password);
 		$this->password = $password;
-	}
-
-	private function denyLogin($denyMessage)
-	{
-		$this->registerFailedLogin();
-		throw new \InvalidArgumentException($denyMessage);
 	}
 
 	private function isMaxUnsuccessLoginReached()

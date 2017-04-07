@@ -13,49 +13,62 @@ use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
 {
+	const TOO_SHORT_LOGIN = "a";
 	const GOOD_PASS = "secret";
 	const WRONG_PASS = "wrongpass";
+	const EMPTY_PASS = "";
 
-	public function testSuccessLogin()
+	public function testUserWithTooShortLoginName()
 	{
-		$user = $this->getAUser();
-		$this->doALoginWithPassword($user, self::GOOD_PASS);
-		$this->assertTrue(true);
-	}
-
-	public function testFailedLoginWithWrongPassword()
-	{
-		$user = $this->getAUser();
 		$this->expectException(\InvalidArgumentException::class);
-		$this->doALoginWithPassword($user, self::WRONG_PASS);
+		User::createWithData(1,"Csizmarik Norbert",self::TOO_SHORT_LOGIN,self::GOOD_PASS);
 	}
 
-	public function testFailedLoginForInactiveUser()
+	public function testUserWithEmptyPasswordName()
+	{
+		$this->expectException(\InvalidArgumentException::class);
+		User::createWithData(1,"Csizmarik Norbert","norbi",self::EMPTY_PASS);
+	}
+
+	public function testValidCredentialValidation()
+	{
+		$user = $this->getAUser();
+		$credentialValidationResult = $user->validateCredential(self::GOOD_PASS);
+		$this->assertTrue($credentialValidationResult->isSuccess());
+	}
+
+	public function testFailedCredentialValidationWithWrongPassword()
+	{
+		$user = $this->getAUser();
+		$credentialValidationResult = $user->validateCredential(self::WRONG_PASS);
+		$this->assertFalse($credentialValidationResult->isSuccess());
+	}
+
+	public function testFailedCredentialValidationForInactiveUser()
 	{
 		$user = $this->getAUser();
 		$user->deactivate();
-		$this->expectException(\InvalidArgumentException::class);
-		$this->doALoginWithPassword($user, self::GOOD_PASS);
+		$credentialValidationResult = $user->validateCredential(self::GOOD_PASS);
+		$this->assertFalse($credentialValidationResult->isSuccess());
 	}
 
-	public function testFailedLoginAfterTooMuchUncuccessLogin()
+	public function testFailedCredentialValidationAfterTooMuchUnsuccess()
 	{
 		$user = $this->getAUser();
 		$this->doAnUnsuccessLoginWithotException($user);
 		$this->doAnUnsuccessLoginWithotException($user);
 		$this->doAnUnsuccessLoginWithotException($user);
-		$this->expectException(\InvalidArgumentException::class);
-		$this->doALoginWithPassword($user, self::GOOD_PASS);
-
+		$credentialValidationResult = $user->validateCredential(self::GOOD_PASS);
+		$this->assertFalse($credentialValidationResult->isSuccess());
 	}
 
-	public function testLoginActivation()
+	public function testUserActivation()
 	{
 		$user = $this->getAUser();
 		$user->deactivate();
 		$user->activate();
-		$this->doALoginWithPassword($user, self::GOOD_PASS);
-		$this->assertTrue(true);
+		$credentialValidationResult = $user->validateCredential(self::GOOD_PASS);
+		$this->assertTrue($credentialValidationResult->isSuccess());
 	}
 
 	public function resetUnsuccessLoginCounter()
@@ -65,8 +78,8 @@ class UserTest extends TestCase
 		$this->doAnUnsuccessLoginWithotException($user);
 		$this->doAnUnsuccessLoginWithotException($user);
 		$user->resetUnsuccessLoginCounter();
-		$this->doALoginWithPassword($user, self::GOOD_PASS);
-		$this->assertTrue(true);
+		$credentialValidationResult = $user->validateCredential(self::GOOD_PASS);
+		$this->assertTrue($credentialValidationResult->isSuccess());
 	}
 
 	private function getAUser()
@@ -74,16 +87,9 @@ class UserTest extends TestCase
 		return User::createWithData(1,"Csizmarik Norbert","norbi",self::GOOD_PASS);
 	}
 
-	private function doALoginWithPassword(User $user, $password)
-	{
-		$user->loginWithPasswordAt($password, new \DateTime("now"));
-	}
-
 	private function doAnUnsuccessLoginWithotException(User $user)
 	{
-		try {
-			$this->doALoginWithPassword($user, "wrongpass");
-		} catch (\InvalidArgumentException $e) {
-		}
+		$credentialValidationResult = $user->validateCredential(self::WRONG_PASS);
+		$user->registerCredentialValidationResult($credentialValidationResult->isSuccess(), new \DateTime("now"));
 	}
 }

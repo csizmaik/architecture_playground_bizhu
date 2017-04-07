@@ -12,4 +12,5 @@ namespace services\external\storage;
 interface Transaction
 {
 	public function transactional(callable $transactionalFunction);
+	public function flush();
 }

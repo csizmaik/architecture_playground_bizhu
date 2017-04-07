@@ -10,10 +10,10 @@ services:
         class: %time_service.class%
     auth_service:
         class: %auth_service.class%
-        arguments: ["@user_repository","@transaction_service","@time_service"]
+        arguments: ["@user_management_service","@transaction_service"]
     user_management_service:
         class: %user_management_service.class%
-        arguments: ["@user_repository","@transaction_service"]
+        arguments: ["@user_repository","@transaction_service","@time_service"]
     user_repository:
         factory: ['@doctrine_service', getRepository]
         arguments: ['services\internal\user\User']

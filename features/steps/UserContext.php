@@ -9,6 +9,7 @@ use base\DatabaseInit;
 use base\SymfonyDIContainerAwareContext;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use services\internal\auth\AuthenticationFailedException;
 
 class UserContext extends SymfonyDIContainerAwareContext implements Context
 {
@@ -107,12 +108,12 @@ class UserContext extends SymfonyDIContainerAwareContext implements Context
 	 */
 	public function userTriesToLoginWithPassword($login, $password)
 	{
-		/** @var \services\internal\user\AuthService $authService */
+		/** @var \services\internal\auth\AuthService $authService */
 		$authService = $this->getService('auth_service');
 		try {
 			$authService->login($login, $password);
 			$this->successLogin = true;
-		} catch (InvalidArgumentException $exception) {
+		} catch (AuthenticationFailedException $exception) {
 			$this->successLogin = false;
 		}
 	}

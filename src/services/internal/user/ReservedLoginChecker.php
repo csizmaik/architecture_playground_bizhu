@@ -16,5 +16,6 @@ class ReservedLoginChecker
 		if ($loginNameUsed) {
 			throw new \InvalidArgumentException("The login name already used");
 		}
+		return true;
 	}
 }

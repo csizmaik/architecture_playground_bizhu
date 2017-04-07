@@ -9,6 +9,7 @@
 namespace services\internal\user;
 
 use services\external\storage\Transaction;
+use services\external\time\TimeService;
 
 class UserService
 {
@@ -17,31 +18,37 @@ class UserService
 	 * @var Transaction
 	 */
 	private $transactionService;
+	/**
+	 * @var TimeService
+	 */
+	private $timeService;
 
-	public function __construct(UserRepository $userRepository, Transaction $transactionService)
+	public function __construct(UserRepository $userRepository, Transaction $transactionService, TimeService $timeService)
 	{
 		$this->userRepository = $userRepository;
 		$this->transactionService = $transactionService;
+		$this->timeService = $timeService;
 	}
 
 	public function registerUser($name, $login, $password)
 	{
 		return $this->transactionService->transactional(function() use ($name, $login, $password){
-			$this->reservedLoginCheck($login);
+			ReservedLoginChecker::check($this->userRepository->isUserExistsWithLogin($login));
 			$userId = $this->userRepository->nextId();
 			$user = User::createWithData($userId, $name, $login, $password);
 			$this->userRepository->addUser($user);
 			return $userId;
 		});
-
 	}
 
-	public function reservedLoginCheck($login)
+	public function validateCredential($login, $password)
 	{
-		ReservedLoginChecker::check(
-			$this->userRepository->isUserExistsWithLogin($login)
-		);
-
+		/** @var User $user */
+		$user = $this->userRepository->getUserByLoginName($login);
+		$validationResult = $user->validateCredential($password);
+		$user->registerCredentialValidationResult($validationResult->isSuccess(),$this->timeService->getCurrentDateTime());
+		$this->transactionService->flush();
+		return $validationResult;
 	}
 
 	public function deactivateUserByLogin($login)
